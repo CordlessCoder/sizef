@@ -17,19 +17,19 @@ pub const GIB: BYTES = MIB * 1024;
 pub const TIB: BYTES = GIB * 1024;
 pub const PIB: BYTES = TIB * 1024;
 
-pub const UNITS: [ByteUnit<'static>; 6] = [
-    ByteUnit::from_tuple((B, "b")),
-    ByteUnit::from_tuple((KIB, "kb")),
-    ByteUnit::from_tuple((MIB, "mb")),
-    ByteUnit::from_tuple((GIB, "gb")),
-    ByteUnit::from_tuple((TIB, "tb")),
-    ByteUnit::from_tuple((PIB, "pb")),
-];
 pub const UNITS_SI: [ByteUnit<'static>; 6] = [
+    ByteUnit::from_tuple((B, "b")),
+    ByteUnit::from_tuple((KB, "k")),
+    ByteUnit::from_tuple((MB, "m")),
+    ByteUnit::from_tuple((GB, "g")),
+    ByteUnit::from_tuple((TB, "t")),
+    ByteUnit::from_tuple((PB, "p")),
+];
+pub const UNITS: [ByteUnit<'static>; 6] = [
     ByteUnit::from_tuple((B, "B")),
-    ByteUnit::from_tuple((KB, "KiB")),
-    ByteUnit::from_tuple((MB, "MiB")),
-    ByteUnit::from_tuple((GB, "GiB")),
-    ByteUnit::from_tuple((TB, "TiB")),
-    ByteUnit::from_tuple((PB, "PiB")),
+    ByteUnit::from_tuple((KIB, "KiB")),
+    ByteUnit::from_tuple((MIB, "MiB")),
+    ByteUnit::from_tuple((GIB, "GiB")),
+    ByteUnit::from_tuple((TIB, "TiB")),
+    ByteUnit::from_tuple((PIB, "PiB")),
 ];

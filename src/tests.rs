@@ -15,58 +15,58 @@ mod tests {
 
     #[test]
     fn size_formatter_under_1kib() {
-        size_formatter_test(495, "495b", false)
+        size_formatter_test(495, "495B", false)
     }
 
     #[test]
     fn size_formatter_exactly_1_kib() {
-        size_formatter_test(1024, "1kb", false)
+        size_formatter_test(1024, "1KiB", false)
     }
 
     #[test]
     fn size_formatter_under_1mib() {
-        size_formatter_test(1024 * 512, "512kb", false)
+        size_formatter_test(1024 * 512, "512KiB", false)
     }
 
     #[test]
     fn size_formatter_exactly_1mib() {
-        size_formatter_test(1024 * 1024, "1mb", false)
+        size_formatter_test(1024 * 1024, "1MiB", false)
     }
 
     #[test]
     fn size_formatter_under_1gib() {
-        size_formatter_test(299 * 1024 * 1024, "299mb", false)
+        size_formatter_test(299 * 1024 * 1024, "299MiB", false)
     }
 
     #[test]
     fn size_formatter_exactly_1gib() {
-        size_formatter_test(KIB.pow(3), "1gb", false)
+        size_formatter_test(KIB.pow(3), "1GiB", false)
     }
 
     #[test]
     fn size_formatter_under_1tib() {
-        size_formatter_test(KIB.pow(3) * 128, "128gb", false)
+        size_formatter_test(KIB.pow(3) * 128, "128GiB", false)
     }
 
     #[test]
     fn size_formatter_exactly_1tib() {
-        size_formatter_test(KIB.pow(4), "1tb", false)
+        size_formatter_test(KIB.pow(4), "1TiB", false)
     }
 
     #[test]
     fn size_formatter_under_1pib() {
-        size_formatter_test(KIB.pow(4) * 256, "256tb", false)
+        size_formatter_test(KIB.pow(4) * 256, "256TiB", false)
     }
 
     #[test]
     fn size_formatter_exactly_1pib() {
-        size_formatter_test(KIB.pow(5), "1pb", false)
+        size_formatter_test(KIB.pow(5), "1PiB", false)
     }
 
     #[test]
     fn exactsize_formatter_3pib_2gb_3b() {
         let mut buf = String::new();
         write!(&mut buf, "{}", (3 * PIB + 2 * GIB + 3 * B).into_longsize()).unwrap();
-        assert_eq!(buf, "3pb 2gb 3b");
+        assert_eq!(buf, "3PiB 2GiB 3B");
     }
 }
