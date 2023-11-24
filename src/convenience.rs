@@ -29,22 +29,30 @@ impl From<DecimalSize> for Size {
 }
 
 pub trait IntoSize {
-    fn into_size(&self) -> Size;
-    fn into_longsize(&self) -> LongSize;
-    fn into_decimalsize(&self) -> DecimalSize;
+    fn into_size(self) -> Size;
+    fn into_longsize(self) -> LongSize;
+    fn into_decimalsize(self) -> DecimalSize;
 }
 
-impl IntoSize for u64 {
-    fn into_size(&self) -> Size {
-        Size::new(*self)
-    }
-    fn into_longsize(&self) -> LongSize {
-        LongSize::new(*self)
-    }
-    fn into_decimalsize(&self) -> DecimalSize {
-        DecimalSize(*self)
-    }
+macro_rules! impl_for {
+    ($($t:ty),*) => {
+    $(
+        impl IntoSize for $t {
+            fn into_size(self) -> Size {
+                Size::new(self as u64)
+            }
+            fn into_longsize(self) -> LongSize {
+                LongSize::new(self as u64)
+            }
+            fn into_decimalsize(self) -> DecimalSize {
+                DecimalSize(self as u64)
+            }
+        }
+    )*
+    };
 }
+
+impl_for!(u8, u16, u32, u64, i8, i16, i32, i64, f32);
 
 impl LongSize {
     pub fn new(bytes: BYTES) -> Self {
