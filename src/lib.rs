@@ -1,4 +1,5 @@
-use std::fmt::{Debug, Display, Write};
+#![no_std]
+use core::fmt::{self, Debug, Display, Formatter, Write};
 mod constants;
 mod convenience;
 pub use constants::*;
@@ -9,22 +10,22 @@ pub struct Size(BYTES);
 impl Display for Size {
     /// Formats the contained size with non-SI units(KiB, real powers of 2), into the first unit it
     /// converts to as non-zero
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         self.fmt_with_units(f, UNITS.iter().copied())
     }
 }
 
 impl Debug for Size {
     /// Formats the contained size with SI units, into the first unit it converts to as non-zero
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         self.fmt_with_units(f, UNITS_SI.iter().copied())
     }
 }
 
 impl<'a> Size {
-    fn fmt_with_units<I>(&self, f: &mut std::fmt::Formatter<'_>, units: I) -> std::fmt::Result
+    fn fmt_with_units<I>(&self, f: &mut Formatter<'_>, units: I) -> fmt::Result
     where
-        I: Iterator<Item = ByteUnit<'a>> + std::iter::DoubleEndedIterator,
+        I: Iterator<Item = ByteUnit<'a>> + core::iter::DoubleEndedIterator,
     {
         let bytes = self.0;
         let Some(ByteUnit { size, name }) = units
@@ -44,22 +45,22 @@ pub struct LongSize(BYTES);
 impl Display for LongSize {
     /// Formats the contained size with non-SI units(KiB, real powers of 2),
     /// into every unit it converts into which ends up non-zero
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         self.fmt_with_units(f, UNITS.iter().copied())
     }
 }
 
 impl Debug for LongSize {
     /// Formats the contained size with SI units, printing every non-zero unit it converts into
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         self.fmt_with_units(f, UNITS_SI.iter().copied())
     }
 }
 
 impl<'a> LongSize {
-    fn fmt_with_units<I>(&self, f: &mut std::fmt::Formatter<'_>, units: I) -> std::fmt::Result
+    fn fmt_with_units<I>(&self, f: &mut Formatter<'_>, units: I) -> fmt::Result
     where
-        I: Iterator<Item = ByteUnit<'a>> + std::iter::DoubleEndedIterator,
+        I: Iterator<Item = ByteUnit<'a>> + core::iter::DoubleEndedIterator,
     {
         let mut bytes = self.0;
         let mut units = units
@@ -99,22 +100,22 @@ pub struct DecimalSize(BYTES);
 impl Display for DecimalSize {
     /// Formats the contained size with non-SI units(KiB, real powers of 2), into the first unit it
     /// converts to as non-zero
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         self.fmt_with_units(f, UNITS.iter().copied())
     }
 }
 
 impl Debug for DecimalSize {
     /// Formats the contained size with SI units, into the first unit it converts to as non-zero
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         self.fmt_with_units(f, UNITS_SI.iter().copied())
     }
 }
 
 impl<'a> DecimalSize {
-    fn fmt_with_units<I>(&self, f: &mut std::fmt::Formatter<'_>, units: I) -> std::fmt::Result
+    fn fmt_with_units<I>(&self, f: &mut Formatter<'_>, units: I) -> fmt::Result
     where
-        I: Iterator<Item = ByteUnit<'a>> + std::iter::DoubleEndedIterator,
+        I: Iterator<Item = ByteUnit<'a>> + core::iter::DoubleEndedIterator,
     {
         let bytes = self.0;
         let Some(ByteUnit { size, name }) = units
@@ -127,7 +128,7 @@ impl<'a> DecimalSize {
         };
         let converted = bytes as f32 / size as f32;
 
-        let round = converted.fract() < 0.1;
+        let round = converted % 1.0 < 0.1;
         if round {
             f.write_fmt(format_args!("{converted:.0}{name}"))
         } else {
