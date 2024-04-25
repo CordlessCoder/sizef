@@ -52,7 +52,7 @@ macro_rules! impl_for {
     };
 }
 
-impl_for!(u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+impl_for![u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64];
 
 impl LongSize {
     pub fn new(bytes: BYTES) -> Self {

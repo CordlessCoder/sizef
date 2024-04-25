@@ -30,11 +30,7 @@ impl<'a> Size {
         let Some(ByteUnit { size, name }) = units
             // Iterate from the end of the units(largest unit) towards the smallest unit
             .rev()
-            // Filter to only include units that are bigger than the size we're trying to format
-            .filter(|unit| bytes >= unit.size)
-            // Only take the first one that matches, as every one after that is going to be smaller
-            .take(1)
-            .next()
+            .find(|unit| bytes >= unit.size)
         else {
             return f.write_char('0');
         };
@@ -71,7 +67,7 @@ impl<'a> LongSize {
             .rev();
         // Write first unit without a space at the beginning
         let first_unit = 'firstunit: {
-            while let Some(unit) = units.next() {
+            for unit in &mut units {
                 if bytes >= unit.size {
                     break 'firstunit Some(unit);
                 }
@@ -84,7 +80,7 @@ impl<'a> LongSize {
         let converted = bytes / size;
         bytes -= converted * size;
         write!(f, "{converted}{name}")?;
-        for ByteUnit { size, name } in units {
+        for ByteUnit { size, name } in &mut units {
             // Filter to only include units that are bigger than the size we're trying to format
             if bytes < size {
                 continue;
@@ -125,10 +121,7 @@ impl<'a> DecimalSize {
             // Iterate from the end of the units(largest unit) towards the smallest unit
             .rev()
             // Filter to only include units that are bigger than the size we're trying to format
-            .filter(|unit| bytes >= unit.size)
-            // Only take the first one that matches, as every one after that is going to be smaller
-            .take(1)
-            .next()
+            .find(|unit| bytes >= unit.size)
         else {
             return f.write_char('0');
         };
