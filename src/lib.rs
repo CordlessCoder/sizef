@@ -23,16 +23,12 @@ impl Debug for Size {
 }
 
 impl<'a> Size {
-    fn fmt_with_units<I>(&self, f: &mut Formatter<'_>, units: I) -> fmt::Result
+    fn fmt_with_units<I>(&self, f: &mut Formatter<'_>, mut units: I) -> fmt::Result
     where
         I: Iterator<Item = ByteUnit<'a>> + core::iter::DoubleEndedIterator,
     {
         let bytes = self.0;
-        let Some(ByteUnit { size, name }) = units
-            // Iterate from the end of the units(largest unit) towards the smallest unit
-            .rev()
-            .find(|unit| bytes >= unit.size)
-        else {
+        let Some(ByteUnit { size, name }) = units.rfind(|unit| bytes >= unit.size) else {
             return f.write_char('0');
         };
         let converted = bytes / size;
@@ -113,16 +109,14 @@ impl Debug for DecimalSize {
 }
 
 impl<'a> DecimalSize {
-    fn fmt_with_units<I>(&self, f: &mut Formatter<'_>, units: I) -> fmt::Result
+    fn fmt_with_units<I>(&self, f: &mut Formatter<'_>, mut units: I) -> fmt::Result
     where
         I: Iterator<Item = ByteUnit<'a>> + core::iter::DoubleEndedIterator,
     {
         let bytes = self.0;
         let Some(ByteUnit { size, name }) = units
             // Iterate from the end of the units(largest unit) towards the smallest unit
-            .rev()
-            // Filter to only include units that are bigger than the size we're trying to format
-            .find(|unit| bytes >= unit.size)
+            .rfind(|unit| bytes >= unit.size)
         else {
             return f.write_char('0');
         };

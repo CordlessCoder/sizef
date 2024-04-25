@@ -3,8 +3,6 @@ name = "sizef"
 version = "0.2.0"
 edition = "2021"
 license = "MIT"
-description = "A simple #[no_std] crate to format sizes"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
+authors = ["CordlessCoder"]
+description = "A simple #[no_std] crate to format file sizes"
+repository = "https://github.com/CordlessCoder/sizef"
