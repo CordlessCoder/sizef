@@ -114,12 +114,14 @@ impl<'a> DecimalSize {
         I: Iterator<Item = ByteUnit<'a>> + core::iter::DoubleEndedIterator,
     {
         let bytes = self.0;
-        let Some(ByteUnit { size, name }) = units
-            // Iterate from the end of the units(largest unit) towards the smallest unit
-            .rfind(|unit| bytes >= unit.size)
-        else {
+        let Some(smallest) = units.next() else {
             return f.write_char('0');
         };
+        let ByteUnit { size, name } = units
+            // Iterate from the end of the units(largest unit) towards the smallest unit
+            .rfind(|unit| bytes >= unit.size)
+            .unwrap_or(smallest);
+
         let converted = bytes as f32 / size as f32;
 
         let round = converted % 1.0 < 0.1;
